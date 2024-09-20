@@ -16,13 +16,27 @@ variable "public_subnet_cidrs" {
   default     = ["10.0.3.0/24", "10.0.4.0/24"]
 }
 
-variable "region" {
-  description = "The AWS region to deploy the EKS cluster"
-  type        = string
-  default     = "us-west-2"
-}
 
 variable "environment_name" {
     type    = string
     default = "cloudforce"
+}
+
+variable "ami_id" {
+    type = string
+    default = "ami-05134c8ef96964280"
+
+}
+
+variable "instance_type" {
+    type = string
+    default = "t2.micro"
+
+}
+
+variable "cloudforce_trail" {
+    description = "Bucket name to store cloud trails"
+    type = string
+    default = "cloudforce"
+
 }
