@@ -1,88 +1,54 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
-# creating vpc
+ # creating vpc
 resource "aws_vpc" "cloudforce_vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.vpc_cidr
 
   tags = {
-    "Name" = "cloudforce_vpc"
+    "Name" = "${var.environment_name}-vpc"
   }
 }
 
-# creating public subnet 1
-resource "aws_subnet" "cloudforce_publicA" {
-  vpc_id            = aws_vpc.cloudforce_vpc.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1a"
-
+resource "aws_subnet" "public_subnets" {
+  count                   = length(var.public_subnet_cidrs)
+  vpc_id                  = aws_vpc.eks_vpc.id
+  cidr_block              = element(var.public_subnet_cidrs, count.index)
+  map_public_ip_on_launch = true
+  availability_zone       = element(data.aws_availability_zones.available.names, count.index)
   tags = {
-    "Name" = "cloudforce_publicA"
-  }
-}
-# creating private subnet 1
-resource "aws_subnet" "cloudforce_privateA" {
-  vpc_id            = aws_vpc.cloudforce_vpc.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "us-east-1a"
-
-  tags = {
-    "Name" = "cloudforce_privateA"
-  }
-}
-# creating public subnet 2
-resource "aws_subnet" "cloudforce_publicB" {
-  vpc_id            = aws_vpc.cloudforce_vpc.id
-  cidr_block        = "10.0.3.0/24"
-  availability_zone = "us-east-1b"
-
-  tags = {
-    "Name" = "cloudforce_publicB"
-  }
-}
-# creating private subnet 2
-resource "aws_subnet" "cloudforce_privateB" {
-  vpc_id            = aws_vpc.cloudforce_vpc.id
-  cidr_block        = "10.0.4.0/24"
-  availability_zone = "us-east-1b"
-
-  tags = {
-    "Name" = "cloudforce_privateB"
+    Name = "${var.environment_name}-public-subnet-${count.index + 1}"
   }
 }
 
-# creating an internet gateway
-resource "aws_internet_gateway" "cloudforce_igw" {
-  vpc_id = aws_vpc.cloudforce_vpc.id
-
+resource "aws_subnet" "private_subnets" {
+  count             = length(var.private_subnet_cidrs)
+  vpc_id            = aws_vpc.eks_vpc.id
+  cidr_block        = element(var.private_subnet_cidrs, count.index)
+  availability_zone = element(data.aws_availability_zones.available.names, count.index)
   tags = {
-    "Name" = "cloudforce_igw"
+    Name = "${var.environment_name}-private-subnet-${count.index + 1}"
   }
 }
 
-# creating a route table 
-resource "aws_route_table" "cloudforce_rtb" {
-  vpc_id = aws_vpc.cloudforce_vpc.id
-
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.eks_vpc.id
   tags = {
-    "Name" = "cloudforce_rtb"
+    Name = "${var.environment_name}-igw"
   }
 }
-# creating a route
-resource "aws_route" "cloudforce_rt" {
-  route_table_id         = aws_route_table.cloudforce_rtb.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.cloudforce_igw.id
 
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.eks_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+  tags = {
+    Name = "${var.environment_name}-PRT"
+  }
 }
-# associating the route table to public subnet 1
-resource "aws_route_table_association" "cloudforce_rtb_assoc1" {
-  subnet_id      = aws_subnet.cloudforce_publicA.id
-  route_table_id = aws_route_table.cloudforce_rtb.id
-}
-# associating the route table to public subnet 2
-resource "aws_route_table_association" "cloudforce_rtb_assoc2" {
-  subnet_id      = aws_subnet.cloudforce_publicB.id
-  route_table_id = aws_route_table.cloudforce_rtb.id
+
+resource "aws_route_table_association" "public_rt_association" {
+  count          = length(aws_subnet.public_subnets)
+  subnet_id      = element(aws_subnet.public_subnets.*.id, count.index)
+  route_table_id = aws_route_table.public_route_table.id
 }
