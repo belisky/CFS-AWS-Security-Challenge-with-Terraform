@@ -5,8 +5,9 @@ resource "aws_lb" "backend_lb" {
   security_groups    = [aws_security_group.lbsecuritygroupB.id]
 
   subnets = [
-    aws_subnet.cloudforce_privateA.id,
-    aws_subnet.cloudforce_privateB.id
+    aws_subnet.private_subnets.0.id,
+    aws_subnet.private_subnets.1.id,
+  
   ]
 }
 
