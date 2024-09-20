@@ -1,7 +1,7 @@
 resource "aws_launch_template" "frontend" {
   name_prefix = "frontend"
-  image_id = "ami-0557a15b87f6559cf" 
-  instance_type = "t2.micro"
+  image_id = var.ami_id
+  instance_type = var.instance_type
   network_interfaces {
     security_groups = [ "${aws_security_group.instancesg.id}" ]
 
