@@ -35,7 +35,7 @@ resource "aws_security_group" "backendLB_sg" {
   egress {
     from_port   = 0
     to_port     = 0
-    security_groups = [aws_security_group.backend_sg.id]
+    security_groups = [aws_security_group.frontend_sg.id]
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
