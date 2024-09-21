@@ -2,7 +2,7 @@ resource "aws_lb" "frontend_lb" {
   name               = "frontend-lb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.lbsecuritygroupB.id]
+  security_groups    = [aws_security_group.frontendLB_sg.id]
 
   subnets = [
     aws_subnet.public_subnets.0.id,
