@@ -57,7 +57,7 @@ resource "aws_cloudfront_origin_request_policy" "custom_origin_request_policy" {
     header_behavior = "whitelist"
 
     headers {
-      items=["X-Forwarded-For","X-Forwarded-By: CloudFront"]    # Forward the X-Forwarded-For header (Client's IP address)# Optionally forward this if needed
+      items=["X-Forwarded-For","X-Forwarded-By"]    # Forward the X-Forwarded-For header (Client's IP address)# Optionally forward this if needed
     }
   }
 
