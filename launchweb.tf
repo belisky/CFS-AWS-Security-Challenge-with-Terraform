@@ -3,7 +3,7 @@ resource "aws_launch_template" "frontend" {
   image_id = var.ami_id
   instance_type = var.instance_type
   network_interfaces {
-    security_groups = [ "${aws_security_group.instancesg.id}" ]
+    security_groups = [ "${aws_security_group.frontend_sg.id}" ]
 
     associate_public_ip_address = true
   }
