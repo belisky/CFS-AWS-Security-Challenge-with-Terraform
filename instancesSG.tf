@@ -1,6 +1,6 @@
 #Security group setup for frontend instances
 resource "aws_security_group" "frontend_sg" {
-  name = "instancesg"
+  name = "frontend_instance_sg"
   ingress {
     from_port       = 0
     to_port         = 80
@@ -39,7 +39,7 @@ resource "aws_security_group" "frontend_sg" {
 
 # security group for the backend instances
 resource "aws_security_group" "backend_sg" {
-  name = "instancesg"
+  name = "backend_instances_sg"
   ingress {
     from_port       = 0
     to_port         = 80
