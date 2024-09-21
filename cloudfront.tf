@@ -9,7 +9,9 @@ resource "aws_cloudfront_distribution" "cdn" {
       https_port             = 443
       origin_ssl_protocols   = ["TLSv1.2"]
     }
+   
   }
+  
 
   enabled             = true
   is_ipv6_enabled     = true
@@ -27,6 +29,7 @@ resource "aws_cloudfront_distribution" "cdn" {
       }
     }
 
+    origin_request_policy_id = aws_cloudfront_origin_request_policy.custom_origin_request_policy.id
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 0
@@ -45,4 +48,24 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   depends_on = [aws_lb.frontend_lb]
+}
+
+resource "aws_cloudfront_origin_request_policy" "custom_origin_request_policy" {
+  name = "custom-origin-request-policy"
+
+  headers_config {
+    header_behavior = "whitelist"
+
+    headers {
+      items=["X-Forwarded-For","X-Forwarded-By: CloudFront"]    # Forward the X-Forwarded-For header (Client's IP address)# Optionally forward this if needed
+    }
+  }
+
+  cookies_config {
+    cookie_behavior = "none"  # No cookies are forwarded
+  }
+
+  query_strings_config {
+    query_string_behavior = "none"  # No query strings are forwarded
+  }
 }
