@@ -2,7 +2,7 @@ resource "aws_lb" "backend_lb" {
   name               = "backend-lb"
   internal           = true
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.lbsecuritygroupB.id]
+  security_groups    = [aws_security_group.backend_sg.id]
 
   subnets = [
     aws_subnet.private_subnets.0.id,
