@@ -36,4 +36,22 @@ resource "aws_lb_listener" "frontendListener" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.frontendTG.arn
   }
+  
+}
+
+resource "aws_lb_listener_rule" "allow_cloudfront_only" {
+  listener_arn = aws_lb_listener.frontendListener.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.frontendTG.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = "X-Forwarded-By"  # Updated syntax for header field
+      values           = ["CloudFront"]
+    }
+  }
 }
