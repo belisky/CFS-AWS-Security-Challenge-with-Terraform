@@ -43,7 +43,7 @@ variable "cloudforce_trail" {
 
 variable "managed_origin_request_policy_id" {
   type = string
-  default = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
+  default = "216adef6-5c7f-47e4-b989-5492eafa07d3"
 }
 
 variable "custom_request_header_values"{
