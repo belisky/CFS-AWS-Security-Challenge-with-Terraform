@@ -42,6 +42,7 @@ variable "cloudforce_trail" {
 }
 
 variable "managed_origin_request_policy_id" {
+  description = "aws managed policy for origin request"
   type = string
   default = "216adef6-5c7f-47e4-b989-5492eafa07d3"
 }
@@ -52,6 +53,7 @@ variable "custom_request_header_values"{
 }
 
 variable "managed_cache_control_headers_policy_id" {
+  description = "aws managed policy for cache control headers"
   type=string
   default = "83da9c7e-98b4-4e11-a168-04f0df8e2c65"
 }
