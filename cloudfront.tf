@@ -17,17 +17,23 @@ resource "aws_cloudfront_distribution" "cdn" {
   is_ipv6_enabled     = true
   default_root_object = "index.html"
 
+    logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.cloudforce.id
+    prefix          = "CF-cloudfront"
+  }
+
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "frontendweb"
 
-    forwarded_values {
-      query_string = true
-      cookies {
-        forward = "all"
-      }
-    }
+    # forwarded_values {
+    #   query_string = true
+    #   cookies {
+    #     forward = "all"
+    #   }
+    # }
     
     cache_policy_id = aws_cloudfront_cache_policy.custom_cache_policy.id
     origin_request_policy_id = var.managed_origin_request_policy_id
@@ -40,7 +46,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   restrictions {
     geo_restriction {
       restriction_type = "whitelist"
-      locations        = ["US", "CA"]
+      locations        = ["GH"]
     }
   }
 
@@ -67,7 +73,8 @@ resource "aws_cloudfront_cache_policy" "custom_cache_policy" {
         items = [
         "CloudFront-Viewer-Country",  # Cache by country
         "Accept-Language",            # Cache based on language preference
-        # "X-Forwarded-For" #can be added if needed, but not typically used for caching
+        "X-Forwarded-For", #can be added if needed, but not typically used for caching,
+        "X-Forwarded-By"
       ]
       }
     }
