@@ -50,3 +50,8 @@ variable "custom_request_header_values"{
  type = string
  default = "somt1nRand0m"
 }
+
+variable "managed_cache_control_headers_policy_id" {
+  type=string
+  default = "83da9c7e-98b4-4e11-a168-04f0df8e2c65"
+}
