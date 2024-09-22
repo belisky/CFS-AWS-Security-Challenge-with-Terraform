@@ -1,6 +1,6 @@
 output "frontend_dns" {
   value = aws_lb.frontend_lb
 }
-output "backend_dns" {
-  value = aws_lb.backend_lb
+output "cloudfront_dns" {
+  value = aws_cloudfront_distribution.cdn
 }
