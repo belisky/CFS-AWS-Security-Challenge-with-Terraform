@@ -21,11 +21,11 @@ resource "aws_cloudfront_distribution" "cdn" {
   is_ipv6_enabled     = true
   default_root_object = "index.html"
 
-    logging_config {
-    include_cookies = false
-    bucket          = aws_s3_bucket.cloudforce.id
-    prefix          = "CF-cloudfront"
-  }
+  #   logging_config {
+  #   include_cookies = false
+  #   bucket          = "${aws_s3_bucket.cloudforce.id}.s3.amazonaws.com"
+  #   prefix          = "CF-cloudfront"
+  # }
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]

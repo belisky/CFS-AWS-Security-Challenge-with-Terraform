@@ -11,6 +11,7 @@ resource "aws_cloudtrail" "cloudforce_trail" {
 resource "aws_s3_bucket" "cloudforce" {
   bucket        = var.cloudforce_trail
   force_destroy = true
+   
 }
  
 data "aws_iam_policy_document" "CF_policy-cloudtrail" {
@@ -47,6 +48,26 @@ data "aws_iam_policy_document" "CF_policy-cloudtrail" {
     }
  
   }
+
+  #  # Allow CloudFront to write access logs to the bucket
+  # statement {
+  #   sid    = "AWSCloudFrontWrite"
+  #   effect = "Allow"
+
+  #   principals {
+  #     type        = "Service"
+  #     identifiers = ["cloudfront.amazonaws.com"]
+  #   }
+
+  #   actions   = ["s3:PutObject"]
+  #   resources = ["${aws_s3_bucket.cloudforce.arn}/${var.environment_name}/cloudfront-logs/${data.aws_caller_identity.current.account_id}/*"]
+
+  #   # condition {
+  #   #   test     = "StringEquals"
+  #   #   variable = "s3:x-amz-acl"
+  #   #   values   = ["bucket-owner-full-control"]
+  #   # }
+  
 }
 
 resource "aws_s3_bucket_policy" "cloudforce_policy" {
