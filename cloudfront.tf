@@ -9,6 +9,10 @@ resource "aws_cloudfront_distribution" "cdn" {
       https_port             = 443
       origin_ssl_protocols   = ["TLSv1.2"]
     }
+    custom_header {
+      name="X-CDN-ID"
+      value=var.custom_request_header_values
+    }
    
   }
   
@@ -92,6 +96,7 @@ resource "aws_cloudfront_cache_policy" "custom_cache_policy" {
 # resource "aws_cloudfront_origin_request_policy" "custom_origin_request_policy" {
 #   name = "custom-origin-request-policy"
 
+  
 #   headers_config {
 #     header_behavior = "allViewerAndWhitelistCloudFront"
 
