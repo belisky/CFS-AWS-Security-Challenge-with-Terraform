@@ -1,7 +1,8 @@
 # **Deploying a Secure AWS Infrastructure with Terraform**
 
 ## **Infrastructure Diagram**  
-![CF-15 drawio](https://github.com/user-attachments/assets/49044663-ca13-4a11-9589-4ef3f2d5e3ed)
+ ![secure-3-tier drawio](https://github.com/user-attachments/assets/97827f65-6c30-48d2-8574-d88dfc9062b7)
+
 
 
 ## **Challenge Requirements**
