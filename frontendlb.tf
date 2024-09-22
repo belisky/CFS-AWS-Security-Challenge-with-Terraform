@@ -32,11 +32,16 @@ resource "aws_lb_listener" "frontendListener" {
   port              = "80"
   protocol          = "HTTP"
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.frontendTG.arn
-  }
+ default_action {
+    type = "fixed-response"
+
+  fixed_response {
+      content_type = "text/plain"
+      message_body = "ACCESS DENIED"
+      status_code  = "403"
+    }
   
+}
 }
 
 resource "aws_lb_listener_rule" "allow_cloudfront_only" {
@@ -50,8 +55,8 @@ resource "aws_lb_listener_rule" "allow_cloudfront_only" {
 
   condition {
     http_header {
-      http_header_name = "X-Forwarded-By"  # Updated syntax for header field
-      values           = ["CloudFront"]
+      http_header_name = "X-CDN-ID"  # Updated syntax for header field
+      values           = ["${var.custom_request_header_values}"]
     }
   }
 }
