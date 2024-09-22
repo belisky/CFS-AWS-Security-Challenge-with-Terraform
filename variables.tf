@@ -40,3 +40,8 @@ variable "cloudforce_trail" {
     default = "cloudforce"
 
 }
+
+variable "managed_origin_request_policy_id" {
+  type = string
+  default = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
+}

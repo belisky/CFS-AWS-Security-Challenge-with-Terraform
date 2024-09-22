@@ -30,7 +30,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     }
     
     cache_policy_id = aws_cloudfront_cache_policy.custom_cache_policy.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.custom_origin_request_policy.id
+    origin_request_policy_id = var.managed_origin_request_policy_id
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 0
@@ -67,7 +67,7 @@ resource "aws_cloudfront_cache_policy" "custom_cache_policy" {
         items = [
         "CloudFront-Viewer-Country",  # Cache by country
         "Accept-Language",            # Cache based on language preference
-        "X-Forwarded-For" #can be added if needed, but not typically used for caching
+        # "X-Forwarded-For" #can be added if needed, but not typically used for caching
       ]
       }
     }
@@ -82,22 +82,22 @@ resource "aws_cloudfront_cache_policy" "custom_cache_policy" {
   }
 }
 
-resource "aws_cloudfront_origin_request_policy" "custom_origin_request_policy" {
-  name = "custom-origin-request-policy"
+# resource "aws_cloudfront_origin_request_policy" "custom_origin_request_policy" {
+#   name = "custom-origin-request-policy"
 
-  headers_config {
-    header_behavior = "whitelist"
+#   headers_config {
+#     header_behavior = "allViewerAndWhitelistCloudFront"
 
-    headers {
-      items=["X-Forwarded-For","X-Forwarded-By"]    # Forward the X-Forwarded-For header (Client's IP address)# Optionally forward this if needed
-    }
-  }
+#     headers {
+#       items=["X-Forwarded-For"]    # Forward the X-Forwarded-For header (Client's IP address)# Optionally forward this if needed
+#     }
+#   }
 
-  cookies_config {
-    cookie_behavior = "none"  # No cookies are forwarded
-  }
+#   cookies_config {
+#     cookie_behavior = "none"  # No cookies are forwarded
+#   }
 
-  query_strings_config {
-    query_string_behavior = "none"  # No query strings are forwarded
-  }
-}
+#   query_strings_config {
+#     query_string_behavior = "none"  # No query strings are forwarded
+#   }
+# }
