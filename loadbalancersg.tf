@@ -2,8 +2,9 @@
 resource "aws_security_group" "frontendLB_sg" {
   name = "frontendLB-sg"
   ingress {
-    from_port   = 80
+    from_port   = 0
     to_port     = 80
+    security_groups = [aws_cloudfront_distribution.cdn.id]
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
