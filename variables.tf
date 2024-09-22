@@ -45,3 +45,8 @@ variable "managed_origin_request_policy_id" {
   type = string
   default = "33f36d7e-f396-46d9-90e0-52428a34d9dc"
 }
+
+variable "custom_request_header_values"{
+ type = string
+ default = "somt1nRand0m"
+}
